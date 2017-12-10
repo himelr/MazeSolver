@@ -104,8 +104,9 @@ public class LAb51 {
 //        return ed;
 //
 //    }
-    public void printGraph() throws FileNotFoundException {
+    public String printGraph() throws FileNotFoundException {
         Scanner s = new Scanner(f);
+        StringBuilder kappa = new StringBuilder();
         while (s.hasNext()) {
             String lul = s.nextLine();
             StringBuilder keppo = new StringBuilder();
@@ -117,9 +118,11 @@ public class LAb51 {
                 }
 
             }
-            System.out.println(keppo);
+            kappa.append(keppo.toString() + "\n");
+            //System.out.println(keppo);
 
         }
+        return kappa.toString();
 
     }
 
@@ -144,6 +147,7 @@ public class LAb51 {
                     dfs(node, visited, pred, find);
 
                 }
+
             }
         }
     }
@@ -202,33 +206,40 @@ public class LAb51 {
             steps[i--] = node;
             node = pred[node];
         }
+
         // include also the end vertex 
         return (n + 1);
     }
-    private final static String FILE = "maz2.grh";
+
     private final static int FROM = 0;
-    private final static int TO = 15;
 
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, IOException {
         String[] mazes = new String[4];
         mazes[0] = "maze.grh";
         mazes[1] = "maz2.grh";
-        int count = 1;
+        mazes[2] = "maze3.grh";
+        mazes[3] = "maze4.grh";
+
+        int count = 4;
         try {
             String arg1 = args[0];
-           
-            count =  Integer.parseInt(arg1);
+
+            count = Integer.parseInt(arg1);
+            if (count > 4) {
+                count = 4;
+
+                System.out.println("Max is 4");
+            }
         } catch (Exception e) {
         }
 
-        
         StringBuilder builder = new StringBuilder();
 
         for (int i = 0; i < count; i++) {
 
             LAb51 g = new LAb51();
             g.readGraph(new File(mazes[i]));
-//            g.printGraph();
+            builder.append(g.printGraph());
             int to = g.nodes() - 1;
             boolean visited[] = new boolean[g.nodes()];
             int pred[] = new int[g.nodes()];
@@ -239,12 +250,15 @@ public class LAb51 {
 
 //            System.out.println("\nMaze " + (i + 1) + " solution from " + FROM + " to " + to);
 //            System.out.println("Graph Adjacent list");
-
             int n = mazeSolution(FROM, to, pred, steps);
             String sol = "";
-            for (int a = 0; a < n; a++) {
+            if (g.reach) {
+                for (int a = 0; a < n; a++) {
 //                System.out.print(steps[a] + " ");
-                sol += steps[a] + " ";
+                    sol += steps[a] + " ";
+                }
+            } else {
+                sol = "No solution available";
             }
             builder.append(sol + "\n \n");
             System.out.println();
@@ -253,16 +267,16 @@ public class LAb51 {
         }
         try (PrintWriter writer = new PrintWriter("solution.txt", "UTF-8")) {
             writer.println(builder.toString());
-            
+
         }
         File file = new File("solution.txt");
 
-//        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                // process the line.
-//                System.out.println(line);
-//            }
-//        }
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                // process the line.
+                System.out.println(line);
+            }
+        }
     }
 }
