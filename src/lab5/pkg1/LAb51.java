@@ -269,14 +269,14 @@ public class LAb51 {
             writer.println(builder.toString());
 
         }
-        File file = new File("solution.txt");
+//        File file = new File("solution.txt");
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                // process the line.
-                System.out.println(line);
-            }
-        }
+//        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                // process the line.
+//                System.out.println(line);
+//            }
+//        }
     }
 }
