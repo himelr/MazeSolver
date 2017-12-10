@@ -5,8 +5,13 @@
  */
 package lab5.pkg1;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -118,12 +123,12 @@ public class LAb51 {
 
     }
 
-    public void dfs(int start, boolean visited[], int pred[]) {
+    public void dfs(int start, boolean visited[], int pred[], int find) {
 
         if (!reach) {
             visited[start] = true;
 
-            if (start == TO) {
+            if (start == find) {
                 reach = true;
                 return;
             }
@@ -136,7 +141,7 @@ public class LAb51 {
 
                 if (!visited[node]) {
                     pred[node] = start;
-                    dfs(node, visited, pred);
+                    dfs(node, visited, pred, find);
 
                 }
             }
@@ -200,44 +205,64 @@ public class LAb51 {
         // include also the end vertex 
         return (n + 1);
     }
-    private final static String FILE = "maze.grh";
+    private final static String FILE = "maz2.grh";
     private final static int FROM = 0;
     private final static int TO = 15;
 
-    public static void main(String[] args) throws FileNotFoundException {
-
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, IOException {
+        String[] mazes = new String[4];
+        mazes[0] = "maze.grh";
+        mazes[1] = "maz2.grh";
+        int count = 1;
         try {
             String arg1 = args[0];
-            String arg2 = args[1];
-            System.out.println(arg1);
-            System.out.println(arg2);
+           
+            count =  Integer.parseInt(arg1);
         } catch (Exception e) {
         }
 
-        LAb51 g = new LAb51();
-//        // read the graph. and do the depth-first search 
-        System.out.println("Graph Adjacent list");
-        g.readGraph(new File(FILE));
+        
+        StringBuilder builder = new StringBuilder();
 
-        g.printGraph();
+        for (int i = 0; i < count; i++) {
 
-//        LinkedList linkedList = g.getList(2);
-//        Iterator i = linkedList.iterator();
-//        while (i.hasNext()) {
-//
-//            System.out.println(i.next());
-//        }
-        boolean visited[] = new boolean[g.nodes()];
-        int pred[] = new int[g.nodes()];
-        g.dfs(FROM, visited, pred);
+            LAb51 g = new LAb51();
+            g.readGraph(new File(mazes[i]));
+//            g.printGraph();
+            int to = g.nodes() - 1;
+            boolean visited[] = new boolean[g.nodes()];
+            int pred[] = new int[g.nodes()];
+            g.dfs(FROM, visited, pred, to);
+            int steps[] = new int[g.nodes()];
 
-        int steps[] = new int[g.nodes()];
+            builder.append("\nMaze " + (i + 1) + " solution from " + FROM + " to " + to + "\n" + "Graph Adjacent list\n");
 
-        System.out.println("\nMaze solution from " + FROM + " to " + TO);
-        int n = mazeSolution(FROM, TO, pred, steps);
-        for (int i = 0; i < n; i++) {
-            System.out.print(steps[i] + " ");
+//            System.out.println("\nMaze " + (i + 1) + " solution from " + FROM + " to " + to);
+//            System.out.println("Graph Adjacent list");
+
+            int n = mazeSolution(FROM, to, pred, steps);
+            String sol = "";
+            for (int a = 0; a < n; a++) {
+//                System.out.print(steps[a] + " ");
+                sol += steps[a] + " ";
+            }
+            builder.append(sol + "\n \n");
+            System.out.println();
+            System.out.println();
+
         }
-        System.out.println();
+        try (PrintWriter writer = new PrintWriter("solution.txt", "UTF-8")) {
+            writer.println(builder.toString());
+            
+        }
+        File file = new File("solution.txt");
+
+//        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                // process the line.
+//                System.out.println(line);
+//            }
+//        }
     }
 }
