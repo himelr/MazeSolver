@@ -1,0 +1,11 @@
+
+Maze 1 solution from 0 to 15
+Graph Adjacent list
+0 6 5 9 15 
+ 
+
+Maze 2 solution from 0 to 18
+Graph Adjacent list
+0 1 13 17 16 18 
+ 
+
